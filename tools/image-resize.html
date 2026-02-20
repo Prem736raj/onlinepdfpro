@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resize Images Online Free - Premium Precision | OnlinePDFPro</title>
+    <meta name="description"
+        content="Resize images online instantly. Scale by percentage or exact dimensions for social media or professional use. 100% browser-based.">
+    <meta name="keywords" content="resize image, change image size, image resizer, scale image, private document tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/image-resize.html">
+
+    <meta property="og:title" content="Resize Images Online Free - OnlinePDFPro">
+    <meta property="og:description"
+        content="Resize images by percentage, exact dimensions or social media presets for free. Batch processing. Browser-based.">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+
+    <style>
+        .batch-file-item {
+            background: var(--surface-1);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(8px);
+            transition: var(--transition-base);
+        }
+
+        .batch-file-item:hover {
+            border-color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .batch-file-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .batch-file-thumb {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+        }
+
+        .batch-file-info {
+            flex: 1;
+        }
+
+        .batch-file-name {
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .batch-file-size {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .batch-file-progress {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .batch-file-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0%;
+        }
+
+        .batch-file-status {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .batch-file-item.success .batch-file-status .status-text {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .batch-file-item.error .batch-file-progress-fill {
+            background: #ef4444;
+        }
+
+        .btn-retry,
+        .btn-remove-file {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-base);
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-retry {
+            background: #ef4444;
+            color: white;
+            border: none;
+        }
+
+        .btn-remove-file {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .btn-remove-file:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .resize-mode-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            background: var(--surface-1);
+            padding: 6px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--glass-border);
+        }
+
+        .resize-mode-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            transition: var(--transition-base);
+        }
+
+        .resize-mode-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .resize-inputs {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .resize-field {
+            flex: 1;
+        }
+
+        .resize-field label {
+            display: block;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .resize-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--surface-1);
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+            transition: var(--transition-base);
+        }
+
+        .resize-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .lock-btn {
+            margin-top: 24px;
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--border-color);
+            background: var(--surface-1);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-base);
+        }
+
+        .lock-btn.locked {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .preset-btn {
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--surface-1);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition-base);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .preset-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .preset-btn small {
+            display: block;
+            opacity: 0.7;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <a href="../tools.html" class="btn btn-primary">Try Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 800px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">Image Engine</span>
+                <h1 class="tool-title fade-in">Image Resize</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Precision scaling for every platform.
+                    Resize by dimensions, percentage, or pro-social presets instantly.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">🖼️</span>
+                <p class="upload-text">Select images to scale</p>
+                <p class="upload-hint">Up to 20 files. Processing stays in your browser.</p>
+                <button class="btn btn-primary upload-btn">Choose Visuals</button>
+            </div>
+
+            <div id="fileSection" style="display: none;">
+                <div class="options-panel glass-card" style="padding: 40px; margin-bottom: 32px;">
+                    <h3 class="options-title"
+                        style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 24px;">Scaling
+                        Controls</h3>
+
+                    <div class="resize-mode-tabs">
+                        <button class="resize-mode-tab active" data-mode="percentage">Percentage</button>
+                        <button class="resize-mode-tab" data-mode="dimensions">Dimensions</button>
+                        <button class="resize-mode-tab" data-mode="presets">Presets</button>
+                    </div>
+
+                    <div id="percentageMode">
+                        <div style="text-align: center; padding: 20px 0;">
+                            <input type="range" id="percentSlider" min="10" max="200" value="100"
+                                style="width: 100%; accent-color: var(--primary);">
+                            <div
+                                style="font-size: 2.25rem; font-weight: 700; color: var(--primary); margin-top: 24px; font-family: 'Outfit', sans-serif;">
+                                <span id="percentValue">100</span>%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dimensionsMode" style="display: none;">
+                        <div class="resize-inputs">
+                            <div class="resize-field">
+                                <label>Width (px)</label>
+                                <input type="number" class="resize-input" id="widthInput" value="800" min="1">
+                            </div>
+                            <button class="lock-btn locked" id="lockBtn" title="Maintain Aspect Ratio">🔗</button>
+                            <div class="resize-field">
+                                <label>Height (px)</label>
+                                <input type="number" class="resize-input" id="heightInput" value="600" min="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="presetsMode" style="display: none;">
+                        <div class="preset-grid">
+                            <button class="preset-btn" data-w="1080" data-h="1080">Insta
+                                Post<small>1080×1080</small></button>
+                            <button class="preset-btn" data-w="1200" data-h="630">FB
+                                Shared<small>1200×630</small></button>
+                            <button class="preset-btn" data-w="1500" data-h="500">Twitter
+                                X<small>1500×500</small></button>
+                            <button class="preset-btn" data-w="1280" data-h="720">HD
+                                720p<small>1280×720</small></button>
+                            <button class="preset-btn" data-w="1920" data-h="1080">Full
+                                HD<small>1920×1080</small></button>
+                            <button class="preset-btn" data-w="800" data-h="600">Web Std<small>800×600</small></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="fileList" style="margin-bottom: 32px;"></div>
+
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <button class="btn btn-secondary" id="addMoreBtn">+ Add More Media</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-lg" id="resizeBtn"
+                        style="width: 100%; padding: 18px; font-size: 1.1rem;">Apply Scaling</button>
+                </div>
+            </div>
+
+            <div id="processingSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+                    <div
+                        style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; font-family: 'Outfit', sans-serif;">
+                        Processing <span id="processedCount">0</span> / <span id="totalCount">0</span>
+                    </div>
+                    <div class="progress-bar"
+                        style="height: 12px; background: var(--bg-tertiary); border-radius: 100px; margin-bottom: 32px; overflow: hidden;">
+                        <div class="progress-fill" id="overallProgress"
+                            style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.4s;">
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="cancelBtn">Stop Processing</button>
+                </div>
+                <div id="processingList" style="margin-top: 32px;"></div>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px;">
+                    <div class="success-message"
+                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;">
+                        Resizing Complete
+                    </div>
+
+                    <div id="resultsList" style="margin-bottom: 40px;"></div>
+
+                    <div class="download-section">
+                        <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
+                            (.ZIP)</button>
+                    </div>
+                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+                </div>
+                <div class="action-buttons mt-lg" style="text-align: center;">
+                    <button class="btn btn-secondary" id="resizeAnother">New Session</button>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Pro-grade engine. 100% on-device isolation.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="../tools.html">All Tools</a></li>
+                        <li><a href="../about.html">About Us</a></li>
+                        <li><a href="../help.html">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            let files = [];
+            let results = [];
+            let thumbnails = {};
+            let isCancelled = false;
+            let resizeMode = 'percentage';
+            let percentageScale = 100;
+            let targetWidth = 800;
+            let targetHeight = 600;
+            let lockAspect = true;
+            let aspectRatio = 4 / 3;
+
+            const uploadZone = document.getElementById('uploadZone');
+            const fileSection = document.getElementById('fileSection');
+            const processingSection = document.getElementById('processingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const fileList = document.getElementById('fileList');
+            const processingList = document.getElementById('processingList');
+            const resultsList = document.getElementById('resultsList');
+
+            const addMoreInput = document.createElement('input');
+            addMoreInput.type = 'file';
+            addMoreInput.accept = 'image/jpeg,image/png,image/webp';
+            addMoreInput.multiple = true;
+            addMoreInput.style.display = 'none';
+            document.body.appendChild(addMoreInput);
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: 'image/jpeg,image/png,image/webp',
+                multiple: true,
+                maxFiles: 20,
+                maxSize: 50 * 1024 * 1024,
+                onFilesSelected: handleFilesSelected
+            });
+
+            document.querySelectorAll('.resize-mode-tab').forEach(tab => {
+                tab.onclick = () => {
+                    document.querySelectorAll('.resize-mode-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    resizeMode = tab.dataset.mode;
+                    document.getElementById('percentageMode').style.display = resizeMode === 'percentage' ? 'block' : 'none';
+                    document.getElementById('dimensionsMode').style.display = resizeMode === 'dimensions' ? 'block' : 'none';
+                    document.getElementById('presetsMode').style.display = resizeMode === 'presets' ? 'block' : 'none';
+                };
+            });
+
+            const percentSlider = document.getElementById('percentSlider');
+            const percentValue = document.getElementById('percentValue');
+            percentSlider.oninput = () => {
+                percentageScale = parseInt(percentSlider.value);
+                percentValue.textContent = percentageScale;
+            };
+
+            const widthInput = document.getElementById('widthInput');
+            const heightInput = document.getElementById('heightInput');
+            const lockBtn = document.getElementById('lockBtn');
+
+            lockBtn.onclick = () => {
+                lockAspect = !lockAspect;
+                lockBtn.classList.toggle('locked', lockAspect);
+                lockBtn.textContent = lockAspect ? '🔗' : '🔓';
+                if (lockAspect) aspectRatio = (parseInt(widthInput.value) || 1) / (parseInt(heightInput.value) || 1);
+            };
+
+            widthInput.oninput = () => {
+                targetWidth = parseInt(widthInput.value) || 1;
+                if (lockAspect) {
+                    targetHeight = Math.round(targetWidth / aspectRatio);
+                    heightInput.value = targetHeight;
+                }
+            };
+
+            heightInput.oninput = () => {
+                targetHeight = parseInt(heightInput.value) || 1;
+                if (lockAspect) {
+                    targetWidth = Math.round(targetHeight * aspectRatio);
+                    widthInput.value = targetWidth;
+                }
+            };
+
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    targetWidth = parseInt(btn.dataset.w);
+                    targetHeight = parseInt(btn.dataset.h);
+                    widthInput.value = targetWidth;
+                    heightInput.value = targetHeight;
+                };
+            });
+
+            async function handleFilesSelected(newFiles) {
+                for (const file of newFiles) {
+                    files.push(file);
+                    thumbnails[file.name] = await createThumbnail(file);
+                }
+                renderFileList();
+                uploadZone.style.display = 'none';
+                fileSection.style.display = 'block';
+            }
+
+            function createThumbnail(file) {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            function renderFileList() {
+                fileList.innerHTML = files.map((file, index) => `
+                    <div class="batch-file-item" style="padding: 16px;">
+                        <div class="batch-file-header" style="margin-bottom: 0;">
+                            <img src="${thumbnails[file.name]}" class="batch-file-thumb" style="width: 40px; height: 40px;">
+                            <div class="batch-file-info">
+                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
+                            </div>
+                            <button class="btn-remove-file" onclick="window.removeFile(${index})">✕</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            window.removeFile = (idx) => {
+                delete thumbnails[files[idx].name];
+                files.splice(idx, 1);
+                if (files.length === 0) resetTool(); else renderFileList();
+            };
+
+            document.getElementById('addMoreBtn').onclick = () => addMoreInput.click();
+            addMoreInput.onchange = (e) => {
+                handleFilesSelected(Array.from(e.target.files));
+                addMoreInput.value = '';
+            };
+
+            document.getElementById('resizeBtn').onclick = startBatchResize;
+            document.getElementById('cancelBtn').onclick = () => { isCancelled = true; };
+            document.getElementById('resizeAnother').onclick = resetTool;
+
+            async function startBatchResize() {
+                if (files.length === 0) return;
+                isCancelled = false; results = [];
+                fileSection.style.display = 'none';
+                processingSection.style.display = 'block';
+                document.getElementById('totalCount').textContent = files.length;
+
+                processingList.innerHTML = files.map((file, index) => `
+                    <div class="batch-file-item" id="process-${index}">
+                        <div class="batch-file-header">
+                            <img src="${thumbnails[file.name]}" class="batch-file-thumb">
+                            <div class="batch-file-info">
+                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
+                            </div>
+                            <div class="batch-file-actions"></div>
+                        </div>
+                        <div class="batch-file-progress"><div class="batch-file-progress-fill"></div></div>
+                        <div class="batch-file-status">
+                            <span class="status-text">Ready...</span>
+                            <span class="status-result"></span>
+                        </div>
+                    </div>
+                `).join('');
+
+                for (let i = 0; i < files.length; i++) {
+                    if (isCancelled) break;
+                    const file = files[i];
+                    const item = document.getElementById(`process-${i}`);
+                    const progressFill = item.querySelector('.batch-file-progress-fill');
+                    const statusText = item.querySelector('.status-text');
+                    const statusResult = item.querySelector('.status-result');
+
+                    try {
+                        statusText.textContent = 'Analyzing...';
+                        progressFill.style.width = '30%';
+                        const { blob, newWidth, newHeight, originalWidth, originalHeight } = await resizeImage(file);
+                        if (isCancelled) break;
+                        progressFill.style.width = '100%';
+                        item.classList.add('success');
+                        statusText.textContent = 'Scaled Successfully';
+                        statusResult.textContent = `${originalWidth}×${originalHeight} → ${newWidth}×${newHeight}`;
+                        results.push({ name: file.name.replace(/\.[^.]+$/, '-resized.jpg'), blob, newWidth, newHeight, success: true });
+                    } catch (error) {
+                        item.classList.add('error');
+                        progressFill.style.width = '100%';
+                        statusText.textContent = 'Failure: ' + error.message;
+                        results.push({ name: file.name, success: false, error: error.message });
+                    }
+                    document.getElementById('processedCount').textContent = i + 1;
+                    document.getElementById('overallProgress').style.width = ((i + 1) / files.length * 100) + '%';
+                }
+                if (!isCancelled) showResults(); else resetTool();
+            }
+
+            function resizeImage(file) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        let newWidth, newHeight;
+                        if (resizeMode === 'percentage') {
+                            newWidth = Math.round(img.width * percentageScale / 100);
+                            newHeight = Math.round(img.height * percentageScale / 100);
+                        } else {
+                            newWidth = targetWidth; newHeight = targetHeight;
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = newWidth; canvas.height = newHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                        canvas.toBlob((blob) => {
+                            if (blob) resolve({ blob, newWidth, newHeight, originalWidth: img.width, originalHeight: img.height });
+                            else reject(new Error('Canvas failure'));
+                        }, 'image/jpeg', 0.9);
+                    };
+                    img.onerror = () => reject(new Error('Corrupt image'));
+                    img.src = URL.createObjectURL(file);
+                });
+            }
+
+            function showResults() {
+                const successResults = results.filter(r => r.success);
+                resultsList.innerHTML = successResults.map((result, index) => `
+                    <div class="batch-file-item" style="margin-bottom: 12px;">
+                        <div class="batch-file-header" style="margin-bottom: 0;">
+                            <span style="font-size: 1.5rem;">🖼️</span>
+                            <div class="batch-file-info">
+                                <div class="batch-file-name">${result.name}</div>
+                                <div class="batch-file-size">${result.newWidth}px wide</div>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 0.8125rem;" onclick="window.downloadSingle(${index})">Get File</button>
+                        </div>
+                    </div>
+                `).join('');
+                window.downloadSingle = (idx) => {
+                    const r = successResults[idx];
+                    OnlinePDFPro.Downloader.saveBlob(r.blob, r.name);
+                };
+                processingSection.style.display = 'none'; resultsSection.style.display = 'block';
+                OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
+                OnlinePDFPro.RecentlyUsed.add('image-resize', 'Image Resize');
+            }
+
+            document.getElementById('downloadAllBtn').onclick = async () => {
+                const successResults = results.filter(r => r.success);
+                if (successResults.length === 0) return;
+                const zip = new JSZip();
+                for (const result of successResults) zip.file(result.name, result.blob);
+                const content = await zip.generateAsync({ type: 'blob' });
+                OnlinePDFPro.Downloader.saveBlob(content, 'resized-batch.zip');
+            };
+
+            function resetTool() {
+                files = []; results = []; thumbnails = {}; isCancelled = false;
+                fileList.innerHTML = ''; processingList.innerHTML = ''; resultsList.innerHTML = '';
+                uploadZone.style.display = 'block'; fileSection.style.display = 'none';
+                processingSection.style.display = 'none'; resultsSection.style.display = 'none';
+                OnlinePDFPro.AutoClear.clearAll();
+            }
+        })();
+    </script>
+</body>
+
+</html>

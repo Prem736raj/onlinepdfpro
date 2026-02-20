@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge PDF Files Online Free - Premium Privacy | OnlinePDFPro</title>
+    <meta name="description"
+        content="Combine multiple PDF files into one professional document. Secure, fast, and 100% private. Drag to reorder.">
+    <meta name="keywords" content="merge PDF, combine PDF, join PDF files, PDF merger, private PDF tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/merge-pdf.html">
+
+    <meta property="og:title" content="Merge PDF Online Free - OnlinePDFPro">
+    <meta property="og:description"
+        content="Combine multiple PDF files into one document for free. Drag to reorder pages. 100% browser-based, no uploads.">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <style>
+        .file-item {
+            background: var(--surface-1);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 16px 24px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: grab;
+            transition: var(--transition-base);
+        }
+
+        .file-item:hover {
+            border-color: var(--aurora-azure);
+            background: var(--surface-2);
+        }
+
+        .file-item:active {
+            cursor: grabbing;
+        }
+
+        .file-drag-handle {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            user-select: none;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .file-size {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .file-remove {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .file-remove:hover {
+            background: var(--error);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <a href="../tools.html" class="btn btn-primary">Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 800px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">Document Assembly</span>
+                <h1 class="tool-title fade-in">Merge PDF</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Combine your files into a single, unified document.
+                    Reorder by dragging. Processed entirely in your browser.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">📎</span>
+                <p class="upload-text">Drop PDFs to merge</p>
+                <p class="upload-hint">Your files never leave your computer</p>
+                <button class="btn btn-primary upload-btn">Select Files</button>
+            </div>
+
+            <div id="fileSection" style="display: none;">
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px;">Drag items to reorder
+                    them in the final document</p>
+                <div class="file-list" id="fileList"></div>
+
+                <div style="text-align: center; margin: 32px 0;">
+                    <button class="btn btn-secondary" id="addMoreBtn">+ Add More Files</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-lg" id="mergeBtn"
+                        style="padding: 16px 40px; font-size: 1.1rem;">Combine All Files</button>
+                </div>
+            </div>
+
+            <div id="progressSection" style="display: none;">
+                <div class="glass-card" style="padding: 40px; text-align: center;">
+                    <h2 style="margin-bottom: 24px;">Merging...</h2>
+                    <div id="progressContainer"></div>
+                </div>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="results-section glass-card">
+                    <div class="success-message"
+                        style="background: none; border: none; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 32px;">
+                        Documents Merged
+                    </div>
+
+                    <div class="results-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalPages">0</div>
+                            <div class="stat-label">Total Pages</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="finalSize" style="color: var(--aurora-azure);">0 KB</div>
+                            <div class="stat-label">Result Size</div>
+                        </div>
+                    </div>
+
+                    <div class="download-section">
+                        <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
+                            Document</button>
+                    </div>
+                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Results will clear in 5:00</div>
+                </div>
+                <div class="action-buttons mt-lg">
+                    <button class="btn btn-secondary" id="mergeAnother">Start New Merge</button>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Maximum security enabled. Zero cloud uploads.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="../tools.html">All Tools</a></li>
+                        <li><a href="../about.html">About Us</a></li>
+                        <li><a href="../help.html">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            const { PDFDocument } = PDFLib;
+
+            let files = [];
+            let mergedPdfBytes = null;
+            let draggedItem = null;
+
+            const uploadZone = document.getElementById('uploadZone');
+            const fileSection = document.getElementById('fileSection');
+            const fileList = document.getElementById('fileList');
+            const progressSection = document.getElementById('progressSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const mergeBtn = document.getElementById('mergeBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const addMoreBtn = document.getElementById('addMoreBtn');
+            const mergeAnother = document.getElementById('mergeAnother');
+
+            const addMoreInput = document.createElement('input');
+            addMoreInput.type = 'file';
+            addMoreInput.accept = '.pdf,application/pdf';
+            addMoreInput.multiple = true;
+            addMoreInput.style.display = 'none';
+            document.body.appendChild(addMoreInput);
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: '.pdf,application/pdf',
+                multiple: true,
+                maxFiles: 100,
+                onFilesSelected: handleFilesSelected
+            });
+
+            function handleFilesSelected(newFiles) {
+                files = [...files, ...newFiles];
+                renderFileList();
+                uploadZone.style.display = 'none';
+                fileSection.style.display = 'block';
+                resultsSection.style.display = 'none';
+            }
+
+            function renderFileList() {
+                fileList.innerHTML = '';
+                files.forEach((file, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'file-item';
+                    item.draggable = true;
+                    item.dataset.index = index;
+
+                    item.innerHTML = `
+                        <span class="file-drag-handle" title="Drag to reorder">⋮⋮</span>
+                        <span class="file-icon" style="font-size: 1.5rem;">📄</span>
+                        <div class="file-info">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
+                        </div>
+                        <button class="file-remove" data-index="${index}" aria-label="Remove">✕</button>
+                    `;
+
+                    item.addEventListener('dragstart', handleDragStart);
+                    item.addEventListener('dragover', handleDragOver);
+                    item.addEventListener('drop', handleDrop);
+                    item.addEventListener('dragend', handleDragEnd);
+
+                    fileList.appendChild(item);
+                });
+
+                fileList.querySelectorAll('.file-remove').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = parseInt(e.target.dataset.index);
+                        files.splice(idx, 1);
+                        if (files.length === 0) resetTool();
+                        else renderFileList();
+                    });
+                });
+            }
+
+            function handleDragStart(e) {
+                draggedItem = e.target.closest('.file-item');
+                draggedItem.style.opacity = '0.5';
+            }
+
+            function handleDragOver(e) {
+                e.preventDefault();
+                const item = e.target.closest('.file-item');
+                if (item && item !== draggedItem) {
+                    item.style.borderTop = '2px solid var(--aurora-azure)';
+                }
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                const item = e.target.closest('.file-item');
+                if (item && item !== draggedItem) {
+                    const fromIndex = parseInt(draggedItem.dataset.index);
+                    const toIndex = parseInt(item.dataset.index);
+                    const [moved] = files.splice(fromIndex, 1);
+                    files.splice(toIndex, 0, moved);
+                    renderFileList();
+                }
+            }
+
+            function handleDragEnd(e) {
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.style.opacity = '1';
+                    item.style.borderTop = '';
+                });
+            }
+
+            addMoreBtn.addEventListener('click', () => addMoreInput.click());
+            addMoreInput.addEventListener('change', (e) => {
+                handleFilesSelected(Array.from(e.target.files));
+                addMoreInput.value = '';
+            });
+
+            mergeBtn.addEventListener('click', mergePDFs);
+
+            async function mergePDFs() {
+                if (files.length < 2) {
+                    alert('Please add at least 2 PDF files to merge.');
+                    return;
+                }
+
+                fileSection.style.display = 'none';
+                progressSection.style.display = 'block';
+
+                const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
+
+                try {
+                    const mergedPdf = await PDFDocument.create();
+                    let totalPages = 0;
+
+                    for (let i = 0; i < files.length; i++) {
+                        progress.update((i / files.length) * 80, `Reading ${files[i].name}...`);
+                        const arrayBuffer = await readFileAsArrayBuffer(files[i]);
+                        const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+                        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                        pages.forEach(page => {
+                            mergedPdf.addPage(page);
+                            totalPages++;
+                        });
+                    }
+
+                    progress.update(90, 'Finalizing...');
+                    mergedPdfBytes = await mergedPdf.save();
+                    document.getElementById('totalPages').textContent = totalPages;
+                    document.getElementById('finalSize').textContent = OnlinePDFPro.Utils.formatFileSize(mergedPdfBytes.length);
+                    progress.complete('Success!');
+
+                    setTimeout(() => {
+                        progressSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+                        OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
+                        OnlinePDFPro.RecentlyUsed.add('merge-pdf', 'Merge PDF');
+                    }, 500);
+
+                } catch (error) {
+                    alert('Merge error: ' + error.message);
+                    resetTool();
+                }
+            }
+
+            function readFileAsArrayBuffer(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+
+            downloadBtn.addEventListener('click', () => {
+                if (!mergedPdfBytes) return;
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                OnlinePDFPro.Downloader.saveBlob(blob, 'merged-document.pdf');
+            });
+
+            mergeAnother.addEventListener('click', resetTool);
+
+            function resetTool() {
+                files = [];
+                mergedPdfBytes = null;
+                uploadZone.style.display = 'block';
+                fileSection.style.display = 'none';
+                progressSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+                fileList.innerHTML = '';
+                OnlinePDFPro.AutoClear.clearAll();
+            }
+        })();
+    </script>
+</body>
+
+</html>

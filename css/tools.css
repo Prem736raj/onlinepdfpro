@@ -1,0 +1,293 @@
+/* =========================================
+   OnlinePDFPro - Premium Tool Styles
+   ========================================= */
+
+.tool-page {
+    padding: 120px 0 80px;
+}
+
+.tool-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.tool-title {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tool-description {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Premium Upload Zone */
+.upload-zone {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px dashed var(--glass-border);
+    border-radius: var(--radius-xl);
+    padding: 80px 40px;
+    text-align: center;
+    transition: var(--transition-base);
+    cursor: pointer;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-zone::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+    border-color: var(--aurora-violet);
+    background: rgba(15, 23, 42, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.upload-icon {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
+}
+
+.upload-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+}
+
+.upload-hint {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    margin-bottom: 32px;
+}
+
+/* File Items */
+.file-item {
+    background: var(--surface-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 12px;
+    transition: var(--transition-base);
+}
+
+.file-item:hover {
+    border-color: var(--aurora-azure);
+    background: var(--surface-2);
+}
+
+.file-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.file-status.processing {
+    color: var(--aurora-violet);
+    font-weight: 600;
+}
+
+/* Options & Controls */
+.options-panel {
+    background: var(--surface-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 40px;
+}
+
+.option-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.form-select,
+.form-input {
+    background: var(--surface-2);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    transition: var(--transition-base);
+}
+
+.form-select:focus,
+.form-input:focus {
+    border-color: var(--aurora-violet);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+/* Premium Tool Cards on Dashboard */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.tool-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    transition: var(--transition-base);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--aurora-violet);
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.tool-card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.tool-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Outfit', sans-serif;
+}
+
+.tool-card-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Filter & Search */
+.search-box {
+    max-width: 600px;
+    margin: 0 auto 48px;
+}
+
+.search-input {
+    background: var(--surface-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    padding: 16px 24px 16px 56px;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    transition: var(--transition-base);
+}
+
+.search-input:focus {
+    border-color: var(--aurora-violet);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+.category-filter {
+    gap: 12px;
+    margin-bottom: 60px;
+}
+
+.filter-btn {
+    background: var(--surface-1);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: var(--transition-base);
+}
+
+.filter-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+}
+
+.filter-btn.active {
+    background: var(--aurora-violet);
+    border-color: var(--aurora-violet);
+    color: white;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* Results & Stats */
+.results-section {
+    background: var(--surface-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    padding: 48px;
+}
+
+.stat-value {
+    color: var(--aurora-azure);
+    font-size: 2.5rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Progress Area */
+.progress-bar {
+    background: var(--surface-2);
+    height: 12px;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, var(--aurora-violet), var(--aurora-azure));
+}
+
+/* Privacy Reminder Tool-specific */
+.privacy-reminder {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    font-weight: 500;
+}
+
+/* Slider Customization */
+.slider {
+    background: var(--surface-2);
+}
+
+.slider::-webkit-slider-thumb {
+    background: var(--aurora-violet);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+/* Animations for tool loads */
+.tools-grid>* {
+    animation: fadeIn 0.5s var(--ease-out) backwards;
+}
+
+@media (max-width: 768px) {
+    .tool-title {
+        font-size: 2.25rem;
+    }
+
+    .upload-zone {
+        padding: 40px 20px;
+    }
+}

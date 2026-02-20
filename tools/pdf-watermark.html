@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Watermark - Pro-Grade Branding | OnlinePDFPro</title>
+    <meta name="description"
+        content="Protect your intellectual property with customizable PDF watermarks. Total control over style, position, and opacity. Private browser-based processing.">
+    <meta name="keywords" content="PDF watermark, add watermark, stamp PDF, PDF protection, private document tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-watermark.html">
+
+    <meta property="og:title" content="PDF Watermark - Pro-Grade Branding | OnlinePDFPro">
+    <meta property="og:description"
+        content="Add text watermarks to PDF documents for free. Customize font, color, position. Browser-based.">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+        }
+
+        .option-group label {
+            display: block;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--surface-1);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            transition: var(--transition-base);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--bg-tertiary);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .slider-value {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            width: 40px;
+        }
+
+        .color-picker-wrapper {
+            position: relative;
+            height: 42px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        #watermarkColor {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: calc(100% + 10px);
+            height: calc(100% + 10px);
+            border: none;
+            cursor: pointer;
+            background: none;
+        }
+
+        .option-buttons {
+            display: flex;
+            gap: 8px;
+            background: var(--surface-1);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            font-family: 'Outfit', sans-serif;
+            transition: var(--transition-base);
+        }
+
+        .option-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <a href="../tools.html" class="btn btn-primary">Try Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 800px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">Protection Suite</span>
+                <h1 class="tool-title fade-in">PDF Watermark</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Imprint your identity with surgical precision.
+                    Custom text overlays for professional document security.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">💧</span>
+                <p class="upload-text">Select document to brand</p>
+                <p class="upload-hint">Your PDF stays offline, always.</p>
+                <button class="btn btn-primary upload-btn">Choose Document</button>
+            </div>
+
+            <div id="optionsSection" style="display: none;">
+                <div class="file-item glass-card" style="margin-bottom: 32px;">
+                    <span class="file-icon">📄</span>
+                    <div class="file-info">
+                        <div class="file-name" id="fileName">document.pdf</div>
+                        <div class="file-size" id="fileSize">0 KB</div>
+                    </div>
+                </div>
+
+                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px;">
+                    <h3 class="options-title"
+                        style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 24px;">Styling
+                        Engine</h3>
+
+                    <div class="option-group" style="margin-bottom: 32px;">
+                        <label>Watermark Text</label>
+                        <input type="text" class="form-input" id="watermarkText" value="CONFIDENTIAL"
+                            placeholder="Enter branding text">
+                    </div>
+
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label>Dimension</label>
+                            <div class="slider-container">
+                                <input type="range" class="slider" id="fontSize" min="20" max="120" value="50">
+                                <span class="slider-value" id="fontSizeValue">50</span>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label>Vibrancy</label>
+                            <div class="slider-container">
+                                <input type="range" class="slider" id="opacity" min="5" max="100" value="30">
+                                <span class="slider-value" id="opacityValue">30%</span>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label>Rotation</label>
+                            <div class="slider-container">
+                                <input type="range" class="slider" id="rotation" min="-180" max="180" value="-45">
+                                <span class="slider-value" id="rotationValue">-45°</span>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label>Palette</label>
+                            <div class="color-picker-wrapper">
+                                <input type="color" id="watermarkColor" value="#8b5cf6">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option-group" style="margin-top: 32px;">
+                        <label>Layout Control</label>
+                        <div class="option-buttons" id="positionOptions">
+                            <button class="option-btn active" data-pos="center">Dynamic Center</button>
+                            <button class="option-btn" data-pos="tiled">Grid Pattern</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-lg" id="applyBtn"
+                        style="width: 100%; padding: 18px; font-size: 1.1rem;">Apply Branding</button>
+                </div>
+            </div>
+
+            <div id="progressSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+                    <div class="progress-container" id="progressContainer"></div>
+                </div>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+                    <div class="success-message"
+                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; color: var(--success); padding: 0; margin-bottom: 32px;">
+                        Watermark Applied
+                    </div>
+
+                    <div class="download-section">
+                        <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download Branded
+                            PDF</button>
+                    </div>
+                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+                </div>
+                <div class="action-buttons mt-lg" style="text-align: center;">
+                    <button class="btn btn-secondary" id="watermarkAnother">New Session</button>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Security first. No server footprints, ever.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                </div>
+            </div>
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
+
+            let pdfBytes = null;
+            let watermarkedPdfBytes = null;
+            let position = 'center';
+
+            const uploadZone = document.getElementById('uploadZone');
+            const optionsSection = document.getElementById('optionsSection');
+            const progressSection = document.getElementById('progressSection');
+            const resultsSection = document.getElementById('resultsSection');
+
+            const fontSize = document.getElementById('fontSize');
+            const opacity = document.getElementById('opacity');
+            const rotation = document.getElementById('rotation');
+
+            fontSize.oninput = () => document.getElementById('fontSizeValue').textContent = fontSize.value;
+            opacity.oninput = () => document.getElementById('opacityValue').textContent = opacity.value + '%';
+            rotation.oninput = () => document.getElementById('rotationValue').textContent = rotation.value + '°';
+
+            document.querySelectorAll('#positionOptions .option-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('#positionOptions .option-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    position = btn.dataset.pos;
+                };
+            });
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: '.pdf,application/pdf',
+                multiple: false,
+                onFilesSelected: handleFileSelected
+            });
+
+            async function handleFileSelected(files) {
+                const file = files[0];
+                try {
+                    pdfBytes = await readFile(file);
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileSize').textContent = OnlinePDFPro.Utils.formatFileSize(file.size);
+                    uploadZone.style.display = 'none';
+                    optionsSection.style.display = 'block';
+                } catch (error) {
+                    alert('Error loading PDF: ' + error.message);
+                }
+            }
+
+            document.getElementById('applyBtn').onclick = applyWatermark;
+
+            async function applyWatermark() {
+                const text = document.getElementById('watermarkText').value.trim();
+                if (!text) { alert('Please enter watermark text.'); return; }
+
+                optionsSection.style.display = 'none';
+                progressSection.style.display = 'block';
+                const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
+                progress.update(20, 'Analyzing structure...');
+
+                try {
+                    const pdf = await PDFLib.PDFDocument.load(pdfBytes);
+                    const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+                    const pages = pdf.getPages();
+                    const size = parseInt(fontSize.value);
+                    const opacityVal = parseInt(opacity.value) / 100;
+                    const rot = parseInt(rotation.value);
+
+                    const colorHex = document.getElementById('watermarkColor').value;
+                    const r = parseInt(colorHex.slice(1, 3), 16) / 255;
+                    const g = parseInt(colorHex.slice(3, 5), 16) / 255;
+                    const b = parseInt(colorHex.slice(5, 7), 16) / 255;
+
+                    for (let i = 0; i < pages.length; i++) {
+                        progress.update(20 + (i / pages.length) * 70, `Engraving page ${i + 1}...`);
+                        const page = pages[i];
+                        const { width, height } = page.getSize();
+                        const textWidth = font.widthOfTextAtSize(text, size);
+
+                        if (position === 'center') {
+                            page.drawText(text, {
+                                x: (width - textWidth) / 2, y: height / 2,
+                                size: size, font: font, color: PDFLib.rgb(r, g, b),
+                                opacity: opacityVal, rotate: PDFLib.degrees(rot)
+                            });
+                        } else {
+                            const gapX = textWidth + 150;
+                            const gapY = size + 150;
+                            for (let x = -width; x < width * 2; x += gapX) {
+                                for (let y = -height; y < height * 2; y += gapY) {
+                                    page.drawText(text, {
+                                        x: x, y: y, size: size, font: font,
+                                        color: PDFLib.rgb(r, g, b), opacity: opacityVal, rotate: PDFLib.degrees(rot)
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    progress.update(95, 'Polishing bytes...');
+                    watermarkedPdfBytes = await pdf.save();
+                    progress.complete('Done!');
+
+                    setTimeout(() => {
+                        progressSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+                        OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
+                        OnlinePDFPro.RecentlyUsed.add('pdf-watermark', 'PDF Watermark');
+                    }, 500);
+
+                } catch (error) {
+                    resetTool();
+                }
+            }
+
+            document.getElementById('downloadBtn').onclick = () => {
+                if (!watermarkedPdfBytes) return;
+                const blob = new Blob([watermarkedPdfBytes], { type: 'application/pdf' });
+                OnlinePDFPro.Downloader.saveBlob(blob, 'watermarked.pdf');
+            };
+
+            document.getElementById('watermarkAnother').onclick = resetTool;
+
+            function resetTool() {
+                pdfBytes = null; watermarkedPdfBytes = null;
+                uploadZone.style.display = 'block'; optionsSection.style.display = 'none';
+                progressSection.style.display = 'none'; resultsSection.style.display = 'none';
+                OnlinePDFPro.AutoClear.clearAll();
+            }
+
+            function readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>

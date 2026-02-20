@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to XLSX - Structured Data Export | OnlinePDFPro</title>
+    <meta name="description"
+        content="Synthesize raw CSV data into professional Excel XLSX workbooks. Fast, private, and powerful conversion with auto-detection for delimiters. Browser-native performance.">
+    <meta name="keywords"
+        content="CSV to XLSX, CSV to Excel, convert CSV, spreadsheet converter, private document tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/csv-to-xlsx.html">
+
+    <meta property="og:title" content="CSV to XLSX - Structured Data Export | OnlinePDFPro">
+    <meta property="og:description"
+        content="Convert CSV files to Excel XLSX format for free. Browser-based, no uploads required.">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <style>
+        .preview-zone {
+            background: var(--surface-1);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .preview-table-container {
+            overflow-x: auto;
+            max-height: 250px;
+            padding: 12px;
+        }
+
+        #previewTable {
+            width: 100%;
+            font-size: 0.8125rem;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: var(--text-secondary);
+        }
+
+        #previewTable th {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        #previewTable td {
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
+        }
+
+        #previewTable tr:last-child td {
+            border-bottom: none;
+        }
+
+        .delim-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            background: var(--surface-1);
+            padding: 6px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+        }
+
+        .delim-btn {
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            font-family: 'Outfit', sans-serif;
+            transition: var(--transition-base);
+        }
+
+        .delim-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <a href="../tools.html" class="btn btn-primary">Try Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 800px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">Data Architect</span>
+                <h1 class="tool-title fade-in">CSV to XLSX</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Transform flat files into rich Excel workbooks.
+                    Advanced delimiter detection and instant previews, all handled locally.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">📈</span>
+                <p class="upload-text">Select CSV/TSV to synthesize</p>
+                <p class="upload-hint">100KB or 100MB, it stays on your machine.</p>
+                <button class="btn btn-primary upload-btn">Choose Data File</button>
+            </div>
+
+            <div id="optionsSection" style="display: none;">
+                <div class="file-item glass-card" style="margin-bottom: 32px;">
+                    <span class="file-icon">📑</span>
+                    <div class="file-info">
+                        <div class="file-name" id="fileName">data.csv</div>
+                        <div class="file-size" id="fileSize">0 KB</div>
+                    </div>
+                </div>
+
+                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px;">
+                    <h3 class="options-title"
+                        style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 24px;">Synthesis
+                        Logic</h3>
+
+                    <div class="option-group" style="margin-bottom: 32px;">
+                        <label
+                            style="display: block; font-size: 0.8125rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Outfit', sans-serif;">Delimiter
+                            Protocol</label>
+                        <div class="delim-selector" id="delimiterOptions">
+                            <button class="delim-btn active" data-delim=",">Comma (,)</button>
+                            <button class="delim-btn" data-delim=";">Semicolon (;)</button>
+                            <button class="delim-btn" data-delim="\t">Tab</button>
+                            <button class="delim-btn" data-delim="auto">Auto-detect</button>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <label
+                            style="display: block; font-size: 0.8125rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Outfit', sans-serif;">Schema
+                            Preview</label>
+                        <div class="preview-zone">
+                            <div class="preview-table-container">
+                                <table id="previewTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-lg" id="convertBtn"
+                        style="width: 100%; padding: 18px; font-size: 1.1rem;">Build Excel Workbook</button>
+                </div>
+            </div>
+
+            <div id="progressSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+                    <div class="progress-container" id="progressContainer"></div>
+                </div>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+                    <div class="success-message"
+                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; color: var(--success); padding: 0; margin-bottom: 40px;">
+                        Workbook Engineered
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="rowCount">0</div>
+                            <div class="stat-label">Records</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="colCount">0</div>
+                            <div class="stat-label">Attributes</div>
+                        </div>
+                    </div>
+
+                    <div class="download-section">
+                        <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
+                            XLSX</button>
+                    </div>
+                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+                </div>
+                <div class="action-buttons mt-lg" style="text-align: center;">
+                    <button class="btn btn-secondary" id="convertAnother">New Session</button>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Encapsulated processing. Your sensitive data never exits this host.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                </div>
+            </div>
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            let csvContent = '';
+            let fileNameBase = '';
+            let delimiter = ',';
+            let xlsxBlob = null;
+            let parsedData = [];
+
+            const uploadZone = document.getElementById('uploadZone');
+            const optionsSection = document.getElementById('optionsSection');
+            const progressSection = document.getElementById('progressSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const previewTable = document.getElementById('previewTable');
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: '.csv,.tsv,text/csv',
+                multiple: false,
+                onFilesSelected: handleFileSelected
+            });
+
+            async function handleFileSelected(files) {
+                const file = files[0];
+                fileNameBase = file.name.replace(/\.(csv|tsv)$/i, '');
+                try {
+                    csvContent = await readFileAsText(file);
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileSize').textContent = OnlinePDFPro.Utils.formatFileSize(file.size);
+                    autoDetectDelimiter();
+                    updatePreview();
+                    uploadZone.style.display = 'none';
+                    optionsSection.style.display = 'block';
+                } catch (error) {
+                    alert('Error reaching source data: ' + error.message);
+                }
+            }
+
+            function autoDetectDelimiter() {
+                const firstLine = csvContent.split('\n')[0];
+                const counts = { ',': (firstLine.match(/,/g) || []).length, ';': (firstLine.match(/;/g) || []).length, '\t': (firstLine.match(/\t/g) || []).length };
+                if (counts['\t'] > counts[','] && counts['\t'] > counts[';']) delimiter = '\t';
+                else if (counts[';'] > counts[',']) delimiter = ';';
+                else delimiter = ',';
+                document.querySelectorAll('#delimiterOptions .delim-btn').forEach(btn => {
+                    const btnDelim = btn.dataset.delim === '\\t' ? '\t' : btn.dataset.delim;
+                    btn.classList.toggle('active', btnDelim === delimiter || btn.dataset.delim === 'auto');
+                });
+            }
+
+            document.querySelectorAll('#delimiterOptions .delim-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('#delimiterOptions .delim-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    if (btn.dataset.delim === 'auto') autoDetectDelimiter();
+                    else delimiter = btn.dataset.delim === '\\t' ? '\t' : btn.dataset.delim;
+                    updatePreview();
+                };
+            });
+
+            function updatePreview() {
+                const lines = csvContent.split('\n').filter(l => l.trim()).slice(0, 6);
+                parsedData = lines.map(line => parseCSVLine(line, delimiter));
+                previewTable.innerHTML = '';
+                parsedData.forEach((row, i) => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement(i === 0 ? 'th' : 'td');
+                        td.textContent = cell.length > 50 ? cell.substring(0, 47) + '...' : cell;
+                        tr.appendChild(td);
+                    });
+                    previewTable.appendChild(tr);
+                });
+            }
+
+            function parseCSVLine(line, delim) {
+                const result = []; let current = ''; let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    if (char === '"') inQuotes = !inQuotes;
+                    else if (char === delim && !inQuotes) { result.push(current.trim()); current = ''; }
+                    else current += char;
+                }
+                result.push(current.trim()); return result;
+            }
+
+            document.getElementById('convertBtn').onclick = convertToXLSX;
+
+            function convertToXLSX() {
+                optionsSection.style.display = 'none';
+                progressSection.style.display = 'block';
+                const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
+                progress.update(30, 'Parsing data stream...');
+                try {
+                    const lines = csvContent.split('\n').filter(line => line.trim());
+                    const data = lines.map(line => parseCSVLine(line, delimiter));
+                    progress.update(60, 'Engineering workbook...');
+                    const worksheet = XLSX.utils.aoa_to_sheet(data);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'DataExport');
+                    progress.update(90, 'Finalizing bits...');
+                    const xlsxData = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                    xlsxBlob = new Blob([xlsxData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    document.getElementById('rowCount').textContent = data.length;
+                    document.getElementById('colCount').textContent = data[0] ? data[0].length : 0;
+                    progress.complete('Done!');
+                    setTimeout(() => {
+                        progressSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+                        OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
+                        OnlinePDFPro.RecentlyUsed.add('csv-to-xlsx', 'CSV to XLSX');
+                    }, 500);
+                } catch (error) {
+                    alert('Synthesis failure: ' + error.message);
+                    resetTool();
+                }
+            }
+
+            document.getElementById('downloadBtn').onclick = () => {
+                if (!xlsxBlob) return;
+                OnlinePDFPro.Downloader.saveBlob(xlsxBlob, `${fileNameBase}.xlsx`);
+            };
+
+            document.getElementById('convertAnother').onclick = resetTool;
+
+            function resetTool() {
+                csvContent = ''; fileNameBase = ''; xlsxBlob = null; parsedData = [];
+                previewTable.innerHTML = ''; uploadZone.style.display = 'block';
+                optionsSection.style.display = 'none'; progressSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+                OnlinePDFPro.AutoClear.clearAll();
+            }
+
+            function readFileAsText(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsText(file);
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>

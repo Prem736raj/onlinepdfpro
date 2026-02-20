@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress PDF Online Free - Premium Privacy | OnlinePDFPro</title>
+    <meta name="description"
+        content="Professional grade PDF compression. Reduce file size radically with zero quality loss. 100% private, browser-based processing.">
+    <meta name="keywords" content="compress PDF, reduce PDF size, shrink PDF, free PDF compressor, private PDF tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/compress-pdf.html">
+
+    <meta property="og:title" content="Compress PDF Online Free - OnlinePDFPro">
+    <meta property="og:description"
+        content="Reduce PDF file size for free. Batch compress multiple PDFs at once. 100% browser-based, no uploads, complete privacy.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/compress-pdf.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+
+    <style>
+        .batch-file-item {
+            background: var(--surface-1);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: var(--transition-base);
+        }
+
+        .batch-file-item:hover {
+            border-color: var(--aurora-azure);
+        }
+
+        .batch-file-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .batch-file-info {
+            flex: 1;
+        }
+
+        .batch-file-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .batch-file-size {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .batch-file-progress {
+            height: 8px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .batch-file-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--aurora-violet), var(--aurora-azure));
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        .batch-file-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .batch-file-item.success {
+            border-color: var(--success);
+        }
+
+        .batch-file-item.success .batch-file-progress-fill {
+            background: var(--success);
+        }
+
+        .batch-file-item.error {
+            border-color: var(--error);
+        }
+
+        .batch-file-item.error .batch-file-progress-fill {
+            background: var(--error);
+        }
+
+        .batch-summary {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .cancel-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .cancel-btn:hover {
+            background: var(--error);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <a href="../tools.html" class="btn btn-primary">Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 800px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">Multi-File Optimizer</span>
+                <h1 class="tool-title fade-in">Compress PDF</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Securely shrink your documents without losing visual fidelity.
+                    Zero server uploads. Zero data leaks.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">📦</span>
+                <p class="upload-text">Drop your documents here</p>
+                <p class="upload-hint">Everything stays 100% private on your device</p>
+                <button class="btn btn-primary upload-btn">Choose Files</button>
+            </div>
+
+            <div id="fileSection" style="display: none;">
+                <div class="options-panel glass-card fade-in">
+                    <h3 class="option-label">Compression Strategy</h3>
+                    <div class="option-buttons" id="compressionLevel">
+                        <button class="option-btn" data-level="low">Maximum Quality</button>
+                        <button class="option-btn active" data-level="medium">Balanced (Recommended)</button>
+                        <button class="option-btn" data-level="high">Minimal Size</button>
+                    </div>
+                </div>
+
+                <div id="fileList" class="fade-in"></div>
+
+                <div style="text-align: center; margin: 32px 0;">
+                    <button class="btn btn-secondary" id="addMoreBtn">+ Add More Files</button>
+                </div>
+
+                <div class="action-buttons fade-in">
+                    <button class="btn btn-primary" id="compressBtn" style="padding: 16px 40px; font-size: 1.1rem;">
+                        Start Compression
+                    </button>
+                </div>
+            </div>
+
+            <div id="processingSection" style="display: none;">
+                <div class="batch-summary glass-card">
+                    <h2 style="margin-bottom: 8px;">Optimizing...</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                        Processed <span id="processedCount">0</span> of <span id="totalCount">0</span> files
+                    </p>
+                    <div class="progress-bar" style="margin-bottom: 24px;">
+                        <div class="progress-fill" id="overallProgress"></div>
+                    </div>
+                    <button class="btn cancel-btn" id="cancelBtn">Cancel Operation</button>
+                </div>
+                <div id="processingList"></div>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="results-section glass-card">
+                    <div class="success-message"
+                        style="background: none; border: none; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 32px;">
+                        Optimization Complete
+                    </div>
+
+                    <div class="results-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalOriginal">0 MB</div>
+                            <div class="stat-label">Original</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalCompressed" style="color: var(--aurora-azure);">0 MB</div>
+                            <div class="stat-label">Optimized</div>
+                        </div>
+                        <div class="stat-item savings">
+                            <div class="stat-value" id="totalSaved">0%</div>
+                            <div class="stat-label">Total Saving</div>
+                        </div>
+                    </div>
+
+                    <div id="resultsList" style="margin: 40px 0;"></div>
+
+                    <div class="download-section">
+                        <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
+                            (.zip)</button>
+                    </div>
+                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Results will clear in 5:00</div>
+                </div>
+                <div class="action-buttons mt-lg">
+                    <button class="btn btn-secondary" id="compressAnother">Compress More PDFs</button>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Military-grade privacy. Your files never touch a server.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="../tools.html">All Tools</a></li>
+                        <li><a href="../about.html">About Us</a></li>
+                        <li><a href="../help.html">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            const { PDFDocument } = PDFLib;
+
+            let files = [];
+            let results = [];
+            let compressionLevel = 'medium';
+            let isCancelled = false;
+
+            const uploadZone = document.getElementById('uploadZone');
+            const fileSection = document.getElementById('fileSection');
+            const processingSection = document.getElementById('processingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const fileList = document.getElementById('fileList');
+            const processingList = document.getElementById('processingList');
+            const resultsList = document.getElementById('resultsList');
+            const levelBtns = document.querySelectorAll('#compressionLevel .option-btn');
+
+            // Add more files input
+            const addMoreInput = document.createElement('input');
+            addMoreInput.type = 'file';
+            addMoreInput.accept = '.pdf,application/pdf';
+            addMoreInput.multiple = true;
+            addMoreInput.style.display = 'none';
+            document.body.appendChild(addMoreInput);
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: '.pdf,application/pdf',
+                multiple: true,
+                maxFiles: 20,
+                maxSize: 100 * 1024 * 1024,
+                onFilesSelected: handleFilesSelected
+            });
+
+            function handleFilesSelected(newFiles) {
+                files = [...files, ...newFiles];
+                renderFileList();
+                uploadZone.style.display = 'none';
+                fileSection.style.display = 'block';
+            }
+
+            function renderFileList() {
+                fileList.innerHTML = files.map((file, index) => `
+                    <div class="batch-file-item" data-index="${index}">
+                        <div class="batch-file-header">
+                            <span class="file-icon" style="font-size: 2rem;">📄</span>
+                            <div class="batch-file-info">
+                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem;" data-index="${index}">Remove</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                fileList.querySelectorAll('button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        files.splice(parseInt(e.target.dataset.index), 1);
+                        if (files.length === 0) resetTool();
+                        else renderFileList();
+                    });
+                });
+            }
+
+            levelBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    levelBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    compressionLevel = btn.dataset.level;
+                });
+            });
+
+            document.getElementById('addMoreBtn').addEventListener('click', () => addMoreInput.click());
+            addMoreInput.addEventListener('change', (e) => {
+                handleFilesSelected(Array.from(e.target.files));
+                addMoreInput.value = '';
+            });
+
+            document.getElementById('compressBtn').addEventListener('click', startBatchCompression);
+            document.getElementById('cancelBtn').addEventListener('click', () => { isCancelled = true; });
+            document.getElementById('compressAnother').addEventListener('click', resetTool);
+
+            async function startBatchCompression() {
+                if (files.length === 0) return;
+
+                isCancelled = false;
+                results = [];
+
+                fileSection.style.display = 'none';
+                processingSection.style.display = 'block';
+
+                document.getElementById('totalCount').textContent = files.length;
+
+                // Create processing UI
+                processingList.innerHTML = files.map((file, index) => `
+                    <div class="batch-file-item" id="process-${index}">
+                        <div class="batch-file-header">
+                            <span class="file-icon" style="font-size: 2rem;">📄</span>
+                            <div class="batch-file-info">
+                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
+                            </div>
+                        </div>
+                        <div class="batch-file-progress">
+                            <div class="batch-file-progress-fill"></div>
+                        </div>
+                        <div class="batch-file-status">
+                            <span class="status-text">Waiting...</span>
+                            <span class="status-result"></span>
+                        </div>
+                    </div>
+                `).join('');
+
+                let totalOriginal = 0;
+                let totalCompressed = 0;
+
+                for (let i = 0; i < files.length; i++) {
+                    if (isCancelled) break;
+
+                    const file = files[i];
+                    const item = document.getElementById(`process-${i}`);
+                    const progressFill = item.querySelector('.batch-file-progress-fill');
+                    const statusText = item.querySelector('.status-text');
+                    const statusResult = item.querySelector('.status-result');
+
+                    try {
+                        statusText.textContent = 'Reading...';
+                        progressFill.style.width = '20%';
+
+                        const arrayBuffer = await readFileAsArrayBuffer(file);
+
+                        if (isCancelled) break;
+
+                        statusText.textContent = 'Compressing...';
+                        progressFill.style.width = '50%';
+
+                        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+
+                        if (isCancelled) break;
+
+                        progressFill.style.width = '80%';
+
+                        const compressedBytes = await pdfDoc.save({ useObjectStreams: true });
+
+                        progressFill.style.width = '100%';
+
+                        const originalSize = file.size;
+                        const compressedSize = compressedBytes.length;
+                        const savedPercent = Math.round((1 - compressedSize / originalSize) * 100);
+
+                        totalOriginal += originalSize;
+                        totalCompressed += compressedSize;
+
+                        item.classList.add('success');
+                        statusText.textContent = 'Done!';
+                        statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(compressedSize)} (${savedPercent > 0 ? savedPercent + '% saved' : 'no change'})`;
+
+                        results.push({
+                            name: file.name.replace('.pdf', '-compressed.pdf'),
+                            originalSize,
+                            compressedSize,
+                            savedPercent,
+                            bytes: compressedBytes,
+                            success: true
+                        });
+
+                    } catch (error) {
+                        console.error('Error compressing', file.name, error);
+                        item.classList.add('error');
+                        progressFill.style.width = '100%';
+                        statusText.textContent = 'Failed: ' + error.message;
+
+                        results.push({
+                            name: file.name,
+                            success: false,
+                            error: error.message
+                        });
+                    }
+
+                    document.getElementById('processedCount').textContent = i + 1;
+                    document.getElementById('overallProgress').style.width = ((i + 1) / files.length * 100) + '%';
+                }
+
+                if (!isCancelled) showResults(totalOriginal, totalCompressed);
+                else resetTool();
+            }
+
+            function showResults(totalOriginal, totalCompressed) {
+                const successResults = results.filter(r => r.success);
+                const totalSaved = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
+
+                document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);
+                document.getElementById('totalCompressed').textContent = OnlinePDFPro.Utils.formatFileSize(totalCompressed);
+                document.getElementById('totalSaved').textContent = totalSaved > 0 ? totalSaved + '%' : '0%';
+
+                resultsList.innerHTML = successResults.map((result, index) => `
+                    <div class="batch-file-item">
+                        <div class="batch-file-header">
+                            <span class="file-icon" style="font-size: 2rem;">📄</span>
+                            <div class="batch-file-info">
+                                <div class="batch-file-name">${result.name}</div>
+                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
+                            </div>
+                            <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.8rem;" data-index="${index}">Download</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                resultsList.querySelectorAll('button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = parseInt(e.target.dataset.index);
+                        const result = successResults[idx];
+                        const blob = new Blob([result.bytes], { type: 'application/pdf' });
+                        OnlinePDFPro.Downloader.saveBlob(blob, result.name);
+                    });
+                });
+
+                processingSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+
+                OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
+                OnlinePDFPro.RecentlyUsed.add('compress-pdf', 'Compress PDF');
+            }
+
+            document.getElementById('downloadAllBtn').addEventListener('click', async () => {
+                const successResults = results.filter(r => r.success);
+                if (successResults.length === 0) return;
+
+                const zip = new JSZip();
+                successResults.forEach(result => {
+                    zip.file(result.name, result.bytes);
+                });
+
+                const content = await zip.generateAsync({ type: 'blob' });
+                OnlinePDFPro.Downloader.saveBlob(content, 'compressed-pdfs.zip');
+            });
+
+            function resetTool() {
+                files = [];
+                results = [];
+                isCancelled = false;
+                fileList.innerHTML = '';
+                processingList.innerHTML = '';
+                resultsList.innerHTML = '';
+                uploadZone.style.display = 'block';
+                fileSection.style.display = 'none';
+                processingSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+                OnlinePDFPro.AutoClear.clearAll();
+            }
+
+            function readFileAsArrayBuffer(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>

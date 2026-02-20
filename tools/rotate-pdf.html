@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotate PDF Pages Online Free - Premium Quality | OnlinePDFPro</title>
+    <meta name="description"
+        content="Rotate PDF pages instantly to any orientation. High-speed, private, and 100% browser-based document rotation.">
+    <meta name="keywords" content="rotate PDF, turn PDF pages, PDF rotation tool, private document tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/rotate-pdf.html">
+
+    <meta property="og:title" content="Rotate PDF Pages Online Free - OnlinePDFPro">
+    <meta property="og:description"
+        content="Rotate PDF pages 90, 180, or 270 degrees for free. Rotate individual or all pages at once. Browser-based.">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+</head>
+
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <a href="../tools.html" class="btn btn-primary">Try Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 900px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">Layout Management</span>
+                <h1 class="tool-title fade-in">Rotate PDF</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Fix document orientation in seconds.
+                    Rotate individual pages or the entire file with pro-grade precision.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">📄</span>
+                <p class="upload-text">Select PDF to rotate</p>
+                <p class="upload-hint">Your files stay on your device. Zero server uploads.</p>
+                <button class="btn btn-primary upload-btn">Choose Document</button>
+            </div>
+
+            <div id="pageSection" style="display: none;">
+                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px; text-align: center;">
+                    <h3 class="options-title"
+                        style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 20px;">Global
+                        Actions</h3>
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" id="rotateAllLeft" style="padding: 10px 20px;">↺ Rotate All
+                            Left</button>
+                        <button class="btn btn-secondary" id="rotateAllRight" style="padding: 10px 20px;">↻ Rotate All
+                            Right</button>
+                        <button class="btn btn-secondary" id="rotateAll180" style="padding: 10px 20px;">⟲ Rotate All
+                            180°</button>
+                    </div>
+                </div>
+
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9375rem;">
+                    Click individual controls to adjust specific pages</p>
+
+                <div class="thumbnails-grid" id="thumbnailsGrid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; margin-bottom: 40px;">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-lg" id="saveBtn"
+                        style="width: 100%; padding: 18px; font-size: 1.1rem;">Apply & Export PDF</button>
+                </div>
+            </div>
+
+            <div id="progressSection" style="display: none;">
+                <div class="glass-card" id="progressContainer" style="padding: 40px; text-align: center;"></div>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+                    <div class="success-message"
+                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; color: var(--success); padding: 0; margin-bottom: 32px;">
+                        Rotation Applied
+                    </div>
+                    <div class="download-section">
+                        <button class="btn btn-primary btn-lg" id="downloadBtn"
+                            style="width: 100%; max-width: 400px; margin: 0 auto;">Download Result</button>
+                    </div>
+                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+                </div>
+                <div class="action-buttons mt-lg" style="text-align: center;">
+                    <button class="btn btn-secondary" id="rotateAnother">Start New Task</button>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Pro-grade layout control. Absolute browser isolation.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="../tools.html">All Tools</a></li>
+                        <li><a href="../about.html">About Us</a></li>
+                        <li><a href="../help.html">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            const { PDFDocument, degrees } = PDFLib;
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+            let pdfBytes = null;
+            let pdfDoc = null;
+            let pageRotations = [];
+            let rotatedPdfBytes = null;
+
+            const uploadZone = document.getElementById('uploadZone');
+            const pageSection = document.getElementById('pageSection');
+            const thumbnailsGrid = document.getElementById('thumbnailsGrid');
+            const progressSection = document.getElementById('progressSection');
+            const resultsSection = document.getElementById('resultsSection');
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: '.pdf,application/pdf',
+                multiple: false,
+                onFilesSelected: handleFileSelected
+            });
+
+            async function handleFileSelected(files) {
+                const file = files[0];
+                try {
+                    const arrayBuffer = await readFile(file);
+                    pdfBytes = arrayBuffer;
+                    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+                    pdfDoc = await loadingTask.promise;
+                    pageRotations = new Array(pdfDoc.numPages).fill(0);
+                    await renderThumbnails();
+                    uploadZone.style.display = 'none';
+                    pageSection.style.display = 'block';
+                } catch (error) {
+                    alert('Error loading PDF: ' + error.message);
+                }
+            }
+
+            async function renderThumbnails() {
+                thumbnailsGrid.innerHTML = '';
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    const page = await pdfDoc.getPage(i);
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const viewport = page.getViewport({ scale: 0.4 });
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    await page.render({ canvasContext: ctx, viewport }).promise;
+
+                    const item = document.createElement('div');
+                    item.style = "background: var(--surface-1); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 12px; transition: var(--transition-base);";
+                    item.innerHTML = `
+                        <div class="thumb-wrapper" style="transform: rotate(${pageRotations[i - 1]}deg); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(var(--shadow-sm));">
+                            <img src="${canvas.toDataURL()}" style="max-width: 100%; border-radius: var(--radius-xs); border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text-muted);">P${i}</span>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.875rem;" data-page="${i}" data-dir="left" title="Rotate Left">↺</button>
+                                <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.875rem;" data-page="${i}" data-dir="right" title="Rotate Right">↻</button>
+                            </div>
+                        </div>
+                    `;
+                    thumbnailsGrid.appendChild(item);
+                }
+
+                thumbnailsGrid.querySelectorAll('button').forEach(btn => {
+                    btn.onclick = (e) => {
+                        const pageNum = parseInt(e.currentTarget.dataset.page);
+                        const dir = e.currentTarget.dataset.dir;
+                        rotatePage(pageNum, dir === 'left' ? -90 : 90);
+                    };
+                });
+            }
+
+            function rotatePage(pageNum, angle) {
+                pageRotations[pageNum - 1] = (pageRotations[pageNum - 1] + angle + 360) % 360;
+                const wrapper = thumbnailsGrid.children[pageNum - 1].querySelector('.thumb-wrapper');
+                wrapper.style.transform = `rotate(${pageRotations[pageNum - 1]}deg)`;
+            }
+
+            document.getElementById('rotateAllLeft').onclick = () => rotateAll(-90);
+            document.getElementById('rotateAllRight').onclick = () => rotateAll(90);
+            document.getElementById('rotateAll180').onclick = () => rotateAll(180);
+
+            function rotateAll(angle) {
+                for (let i = 1; i <= pdfDoc.numPages; i++) rotatePage(i, angle);
+            }
+
+            document.getElementById('saveBtn').onclick = savePDF;
+
+            async function savePDF() {
+                pageSection.style.display = 'none';
+                progressSection.style.display = 'block';
+                const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
+                progress.update(30, 'Recalculating layout...');
+
+                try {
+                    const srcPdf = await PDFDocument.load(pdfBytes);
+                    const pages = srcPdf.getPages();
+                    pages.forEach((page, i) => {
+                        const currentRotation = page.getRotation().angle;
+                        page.setRotation(degrees(currentRotation + pageRotations[i]));
+                    });
+                    progress.update(80, 'Finalizing document...');
+                    rotatedPdfBytes = await srcPdf.save();
+                    progress.complete('Finished');
+                    setTimeout(() => {
+                        progressSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+                        OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
+                        OnlinePDFPro.RecentlyUsed.add('rotate-pdf', 'Rotate PDF');
+                    }, 500);
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                    resetTool();
+                }
+            }
+
+            document.getElementById('downloadBtn').onclick = () => {
+                if (!rotatedPdfBytes) return;
+                OnlinePDFPro.Downloader.saveBlob(new Blob([rotatedPdfBytes]), 'rotated-document.pdf');
+            };
+
+            document.getElementById('rotateAnother').onclick = resetTool;
+
+            function resetTool() {
+                pdfBytes = null; pdfDoc = null; pageRotations = []; rotatedPdfBytes = null;
+                thumbnailsGrid.innerHTML = ''; uploadZone.style.display = 'block';
+                pageSection.style.display = 'none'; progressSection.style.display = 'none';
+                resultsSection.style.display = 'none'; OnlinePDFPro.AutoClear.clearAll();
+            }
+
+            function readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>
